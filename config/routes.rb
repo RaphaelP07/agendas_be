@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :meetings
   resources :messages
   devise_for :users
   resources :organisations
