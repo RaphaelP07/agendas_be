@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_07_031025) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_09_101142) do
+  create_table "messages", force: :cascade do |t|
+    t.text "body"
+    t.integer "sender_id"
+    t.integer "receiver_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "organisations", force: :cascade do |t|
     t.string "name", null: false
     t.string "city_address"
@@ -18,6 +26,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_07_031025) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_organisations_on_user_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "organisation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_teams_on_organisation_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -44,4 +60,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_07_031025) do
   end
 
   add_foreign_key "organisations", "users"
+  add_foreign_key "teams", "organisations"
 end
