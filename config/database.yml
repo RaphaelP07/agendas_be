@@ -5,14 +5,14 @@ default: &default
 
 development:
   <<: *default
-  database: stockappapi_postgresql
+  database: agendasbe_postgresql
   username: postgres
   host: localhost
   password: postgres
 
 test:
   <<: *default
-  database: stockappapi_test
+  database: agendasbe_test
   username: postgres
   password: postgres
   host: localhost
@@ -21,7 +21,7 @@ production:
   <<: *default
   adapter: postgresql
   encoding: unicode
-  database: stockappapi_prod
+  database: agendasbe_prod
   username: postgres
   password: postgres
   host: localhost
