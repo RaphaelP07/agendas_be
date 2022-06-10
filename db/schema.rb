@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_06_10_061455) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "meetings", force: :cascade do |t|
     t.string "agenda"
     t.text "notes"
@@ -19,8 +22,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_061455) do
   end
 
   create_table "meetings_users", id: false, force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "meeting_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "meeting_id", null: false
     t.index ["meeting_id", "user_id"], name: "index_meetings_users_on_meeting_id_and_user_id"
     t.index ["user_id", "meeting_id"], name: "index_meetings_users_on_user_id_and_meeting_id"
   end
@@ -29,8 +32,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_061455) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "sender_id", null: false
-    t.integer "receiver_id", null: false
+    t.bigint "sender_id", null: false
+    t.bigint "receiver_id", null: false
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
@@ -40,18 +43,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_061455) do
     t.string "city_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "admin_id", null: false
+    t.bigint "admin_id", null: false
     t.index ["admin_id"], name: "index_organisations_on_admin_id"
   end
 
   create_table "organisations_users", id: false, force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "organisation_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "organisation_id", null: false
+    t.index ["organisation_id", "user_id"], name: "index_organisations_users_on_organisation_id_and_user_id"
+    t.index ["user_id", "organisation_id"], name: "index_organisations_users_on_user_id_and_organisation_id"
   end
 
   create_table "teams", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "organisation_id", null: false
+    t.bigint "organisation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organisation_id"], name: "index_teams_on_organisation_id"
