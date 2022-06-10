@@ -5,7 +5,15 @@ module DailyCo
     end
 
     def self.create_room
-      response = Request.post('post', "/rooms")
+      payload = {
+        "name" => "getting-started-webinar",
+        "privacy" => "private",
+        "properties" => {
+          "start_audio_off" => true,
+          "start_video_off" => true
+        }
+      }
+      response = Request.post('post', "/rooms", payload)
     end
 
     def self.get_room(name)
@@ -13,7 +21,10 @@ module DailyCo
     end
 
     def self.update_room(name)
-      response = Request.post('post', "/rooms/#{name}")
+      payload = {
+        "privacy" => "public"
+      }
+      response = Request.post('post', "/rooms/#{name}", payload)
     end
 
     def self.delete_room(name)
