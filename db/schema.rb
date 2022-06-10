@@ -10,14 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_09_101829) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_10_050615) do
   create_table "meetings", force: :cascade do |t|
     t.string "agenda"
     t.text "notes"
-    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_meetings_on_user_id"
+  end
+
+  create_table "meetings_users", id: false, force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "meeting_id", null: false
+    t.index ["meeting_id", "user_id"], name: "index_meetings_users_on_meeting_id_and_user_id"
+    t.index ["user_id", "meeting_id"], name: "index_meetings_users_on_user_id_and_meeting_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -31,10 +36,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_101829) do
   create_table "organisations", force: :cascade do |t|
     t.string "name", null: false
     t.string "city_address"
-    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_organisations_on_user_id"
+  end
+
+  create_table "organisations_users", id: false, force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "organisation_id", null: false
   end
 
   create_table "teams", force: :cascade do |t|
@@ -68,7 +76,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_101829) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "meetings", "users"
-  add_foreign_key "organisations", "users"
   add_foreign_key "teams", "organisations"
 end
