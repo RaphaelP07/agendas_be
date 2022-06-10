@@ -8,4 +8,5 @@ class User < ApplicationRecord
   has_and_belongs_to_many :meetings
   has_many :senders, class_name: 'Message', foreign_key: 'sender_id'
   has_many :receivers, class_name: 'Message', foreign_key: 'receiver_id'
+  has_many :admins, class_name: 'Organisation', foreign_key: 'admin_id'
 end

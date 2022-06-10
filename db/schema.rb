@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_10_060230) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_10_061455) do
   create_table "meetings", force: :cascade do |t|
     t.string "agenda"
     t.text "notes"
@@ -40,6 +40,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_060230) do
     t.string "city_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "admin_id", null: false
+    t.index ["admin_id"], name: "index_organisations_on_admin_id"
   end
 
   create_table "organisations_users", id: false, force: :cascade do |t|
@@ -80,5 +82,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_10_060230) do
 
   add_foreign_key "messages", "users", column: "receiver_id"
   add_foreign_key "messages", "users", column: "sender_id"
+  add_foreign_key "organisations", "users", column: "admin_id"
   add_foreign_key "teams", "organisations"
 end
