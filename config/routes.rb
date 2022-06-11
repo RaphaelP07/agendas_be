@@ -1,14 +1,13 @@
 Rails.application.routes.draw do
-  devise_for :users
-  resources :organisations
-  resources :teams
-  resources :meetings
-  resources :messages
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   
   namespace :api do
-    get '/rooms', to: 'daily_co#rooms'
-    get '/room/:name', to: 'daily_co#room'
+    namespace :v1 do
+      devise_for :users
+      resources :organisations
+      get '/rooms', to: 'daily_co#rooms'
+      get '/room/:name', to: 'daily_co#room'
+    end
   end
 
   # Defines the root path route ("/")
