@@ -1,5 +1,5 @@
 class OrganisationsController < ApplicationController
-  before_action :set_organisation, only: %i[ show update destroy ]
+  before_action :set_organisation, only: %i[ show update destroy create_team ]
 
   # GET /organisations
   def index
@@ -38,14 +38,26 @@ class OrganisationsController < ApplicationController
     @organisation.destroy
   end
 
+  # POST /organisations/1/teams
+  def create_team
+    @organisation
+  end
+
   private
-    # Use callbacks to share common setup or constraints between actions.
+
     def set_organisation
       @organisation = Organisation.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def organisation_params
-      params.fetch(:organisation, {})
+      params.require(:organisation).permit(:name, :city_address)
+    end
+
+    def team_params
+      params.require(:team).permit(:name, :organisation_id)
+    end
+
+    def meeting_params
+      params.require(:meeting).permit(:agenda, :notes)
     end
 end

@@ -4,9 +4,9 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [:google_oauth2]
 
   has_and_belongs_to_many :organisations
+  has_many :organisations, foreign_key: 'admin_id'
   has_many :teams, through: :organisations
   has_and_belongs_to_many :meetings
   has_many :senders, class_name: 'Message', foreign_key: 'sender_id'
   has_many :receivers, class_name: 'Message', foreign_key: 'receiver_id'
-  has_many :admins, class_name: 'Organisation', foreign_key: 'admin_id'
 end
