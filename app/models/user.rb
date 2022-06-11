@@ -1,7 +1,8 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable, 
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :omniauthable, omniauth_providers: [:google_oauth2], 
+         :jwt_authenticable, jwt_recovation_strategy: self
 
   has_and_belongs_to_many :organisations
   has_many :organisations, foreign_key: 'admin_id'
