@@ -38,6 +38,7 @@ gem "bootsnap", require: false
 
 gem 'devise'
 gem 'devise-jwt'
+gem 'fast_jsonapi'
 gem 'rspec-rails', '~> 4.0', '>= 4.0.1'
 gem 'rest-client'
 gem 'dotenv-rails'
