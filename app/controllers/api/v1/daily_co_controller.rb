@@ -1,6 +1,8 @@
 module Api
   module V1
     class DailyCoController < ApplicationController
+      before_action :authenticate_user!
+      
       def rooms
         get_rooms = DailyCo::Client.get_rooms
         render json: get_rooms

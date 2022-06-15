@@ -1,6 +1,7 @@
 module Api
   module V1
     class OrganisationsController < ApplicationController
+      before_action :authenticate_user!
       before_action :set_organisation, only: %i[ show update destroy create_team ]
 
       # GET /organisations
