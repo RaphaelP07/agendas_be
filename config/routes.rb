@@ -10,9 +10,9 @@ Rails.application.routes.draw do
         registration: 'signup'
       },
       controllers: {
-        sessions: 'users/sessions',
-        registrations: 'users/registrations',
-        omniauth_callbacks: 'users/omniauth'
+        sessions: 'api/v1/users/sessions',
+        registrations: 'api/v1/users/registrations',
+        omniauth_callbacks: 'api/v1/users/omniauth'
       }
       
       resources :organisations
