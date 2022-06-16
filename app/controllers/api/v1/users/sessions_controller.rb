@@ -27,10 +27,6 @@ module Api
           }, status: :unauthorized
         end
       end
-
-      def sign_in_params
-        params.require(:user).permit(:email, :password)
-      end
     end
   end
 end
