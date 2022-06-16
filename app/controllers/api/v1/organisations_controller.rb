@@ -3,6 +3,7 @@ module Api
     class OrganisationsController < ApplicationController
       before_action :authenticate_api_v1_user!
       before_action :set_organisation, only: %i[ show update destroy create_team ]
+      respond_to :json
 
       # GET /organisations
       def index
@@ -18,10 +19,11 @@ module Api
 
       # POST /organisations
       def create
-        @organisation = Organisation.new(organisation_params)
+        @organisation = current_api_v1_user.organisations.new(organisation_params)
 
         if @organisation.save
-          render json: @organisation, status: :created, location: @organisation
+          @organisation.update(link: generate_string(@organisation[:name]))
+          render json: @organisation, status: :created
         else
           render json: @organisation.errors, status: :unprocessable_entity
         end
@@ -46,15 +48,18 @@ module Api
         @organisation
       end
 
+      def join_link
+      end
+
       private
 
       def set_organisation
         @organisation = Organisation.find(params[:id])
       end
 
-      # def get_user
-      #   @user = 
-      # end
+      def get_user
+        @user = User.find(params[:id])
+      end
 
       def organisation_params
         params.require(:organisation).permit(:name, :city_address)
@@ -66,6 +71,23 @@ module Api
 
       def meeting_params
         params.require(:meeting).permit(:agenda, :notes)
+      end
+
+      def generate_string(string)
+        name = string.split('')
+        i = 0
+        string = []
+        while i < 4
+          o = [('a'..'z'), ('A'..'Z')].map(&:to_a).flatten
+          string.push((0...4).map { o[rand(o.length)] }.join)
+          if string.push(name[i]) == nil
+            string.push('a'..'z')
+          else
+            string.push(name[i])
+          end
+          i += 1
+        end
+        string.join
       end
     end
   end
