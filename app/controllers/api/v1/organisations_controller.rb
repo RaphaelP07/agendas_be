@@ -52,18 +52,25 @@ module Api
 
       def join
         @organisation = Organisation.where(link: params[:link])[0]
-        if @organisation 
+        already_joined = @organisation.users.include?(@user) if @organisation != nil
+
+        if already_joined
+          render json: {
+            message: "You have already joined #{@organisation[:name]}."
+          }, status: :bad_request
+          return
+        end
+
+        if @organisation
           @organisation.users << @user
           render json: {
             data: @organisation, 
-            status: 200,
-            message: "Successfully joined #{@organisation[:name]}"
-          }
+            message: "Successfully joined #{@organisation[:name]}."
+          }, status: :accepted
         else
           render json: {
-            status: 400,
             message: 'Incorrect organisation code.'
-          }
+          }, status: :not_found
         end
       end
 
