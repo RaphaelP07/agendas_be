@@ -80,7 +80,7 @@ module Api
         while i < 4
           o = [('a'..'z'), ('A'..'Z')].map(&:to_a).flatten
           string.push((0...4).map { o[rand(o.length)] }.join)
-          if string.push(name[i]) == nil
+          if name[i] == nil
             string.push('a'..'z')
           else
             string.push(name[i])
