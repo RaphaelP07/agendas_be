@@ -8,14 +8,17 @@ Rails.application.routes.draw do
         sign_in: 'login',
         sign_out: 'logout',
         registration: 'signup'
+        # confirmation: 'confirmation'
       },
       controllers: {
         sessions: 'api/v1/users/sessions',
         registrations: 'api/v1/users/registrations',
+        confirmations: 'api/v1/users/confirmations',
         omniauth_callbacks: 'api/v1/users/omniauth'
       }
       
       resources :organisations
+      post '/organisations/join', to: 'organisations#join'
       get '/rooms', to: 'daily_co#rooms'
       get '/room/:name', to: 'daily_co#room'
     end
