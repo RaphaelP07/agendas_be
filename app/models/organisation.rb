@@ -4,4 +4,5 @@ class Organisation < ApplicationRecord
   belongs_to :admin, class_name: 'User', foreign_key: 'admin_id'
 
   validates :name, uniqueness: true
+  validates :link, uniqueness: true
 end

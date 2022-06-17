@@ -3,11 +3,12 @@ module Api
     class OrganisationsController < ApplicationController
       before_action :authenticate_api_v1_user!
       before_action :set_organisation, only: %i[ show update destroy create_team ]
+      before_action :get_user, only: %i[ index create join create_team ]
       respond_to :json
 
       # GET /organisations
       def index
-        @organisations = Organisation.all
+        @organisations = @user.organisations.all
 
         render json: @organisations
       end
@@ -19,10 +20,11 @@ module Api
 
       # POST /organisations
       def create
-        @organisation = current_api_v1_user.organisations.new(organisation_params)
+        @organisation = @user.organisations.new(organisation_params)
 
         if @organisation.save
           @organisation.update(link: generate_string(@organisation[:name]))
+          @organisation.users << @user
           render json: @organisation, status: :created
         else
           render json: @organisation.errors, status: :unprocessable_entity
@@ -45,10 +47,24 @@ module Api
 
       # POST /organisations/1/teams
       def create_team
-        @organisation
+        
       end
 
-      def join_link
+      def join
+        @organisation = Organisation.where(link: params[:link])[0]
+        if @organisation 
+          @organisation.users << @user
+          render json: {
+            data: @organisation, 
+            status: 200,
+            message: "Successfully joined #{@organisation[:name]}"
+          }
+        else
+          render json: {
+            status: 400,
+            message: 'Incorrect organisation code.'
+          }
+        end
       end
 
       private
@@ -58,11 +74,11 @@ module Api
       end
 
       def get_user
-        @user = User.find(params[:id])
+        @user = current_api_v1_user
       end
 
       def organisation_params
-        params.require(:organisation).permit(:name, :city_address)
+        params.require(:organisation).permit(:name, :city_address, :link)
       end
 
       def team_params
