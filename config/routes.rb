@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       
       resources :organisations
       post '/organisations/join', to: 'organisations#join'
+      post '/organisations/:id/teams', to: 'organisations#create_team'
       get '/rooms', to: 'daily_co#rooms'
       get '/room/:name', to: 'daily_co#room'
     end
