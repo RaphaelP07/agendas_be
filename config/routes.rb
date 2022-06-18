@@ -16,9 +16,10 @@ Rails.application.routes.draw do
         omniauth_callbacks: 'api/v1/users/omniauth'
       }
       
-      resources :organisations
+      resources :organisations do
+        resources :teams
+      end
       post '/organisations/join', to: 'organisations#join'
-      post '/organisations/:id/teams', to: 'organisations#create_team'
       get '/rooms', to: 'daily_co#rooms'
       get '/room/:name', to: 'daily_co#room'
     end
