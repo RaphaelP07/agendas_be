@@ -45,30 +45,6 @@ module Api
         @organisation.destroy
       end
 
-      # POST /organisations/1/teams
-      def create_team
-        @team = @organisation.teams.new(team_params)
-        already_exists = @organisation.teams.include?(@team)
-
-        if already_exists
-          render json: {
-            message: "Team name already exists in this organisation."
-          }, status: :bad_request
-          return
-        end
-
-        if @team.save
-          @team.users << @user
-          render json: @team, status: :created
-        else
-          render json: @team.errors, status: :unprocessable_entity
-        end
-      end
-
-      def add_member_to_team
-        
-      end
-
       def join
         @organisation = Organisation.where(link: params[:link])[0]
         already_joined = @organisation.users.include?(@user) if @organisation != nil
@@ -105,14 +81,6 @@ module Api
 
       def organisation_params
         params.require(:organisation).permit(:name, :city_address, :link)
-      end
-
-      def team_params
-        params.permit(:name)
-      end
-
-      def meeting_params
-        params.require(:meeting).permit(:agenda, :notes)
       end
 
       def generate_string(string)
