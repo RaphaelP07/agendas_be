@@ -1,30 +1,42 @@
-# require "rails_helper"
+require "rails_helper"
 
-# RSpec.describe TeamsController, type: :routing do
-#   describe "routing" do
-#     it "routes to #index" do
-#       expect(get: "/teams").to route_to("teams#index")
-#     end
+RSpec.describe Api::V1::TeamsController, type: :routing do
+  describe "routing" do
+    it "routes to #index" do
+      expect(get: "api/v1/organisations/1/teams").to route_to("api/v1/teams#index", organisation_id: "1")
+    end
 
-#     it "routes to #show" do
-#       expect(get: "/teams/1").to route_to("teams#show", id: "1")
-#     end
+    it "routes to #show" do
+      expect(get: "api/v1/organisations/1/teams/1").to route_to("api/v1/teams#show", id: "1", organisation_id: "1")
+    end
 
 
-#     it "routes to #create" do
-#       expect(post: "/teams").to route_to("teams#create")
-#     end
+    it "routes to #create" do
+      expect(post: "api/v1/organisations/1/teams").to route_to("api/v1/teams#create", organisation_id: "1")
+    end
 
-#     it "routes to #update via PUT" do
-#       expect(put: "/teams/1").to route_to("teams#update", id: "1")
-#     end
+    it "routes to #update via PUT" do
+      expect(put: "api/v1/organisations/1/teams/1").to route_to("api/v1/teams#update", id: "1", organisation_id: "1")
+    end
 
-#     it "routes to #update via PATCH" do
-#       expect(patch: "/teams/1").to route_to("teams#update", id: "1")
-#     end
+    it "routes to #update via PATCH" do
+      expect(patch: "api/v1/organisations/1/teams/1").to route_to("api/v1/teams#update", id: "1", organisation_id: "1")
+    end
 
-#     it "routes to #destroy" do
-#       expect(delete: "/teams/1").to route_to("teams#destroy", id: "1")
-#     end
-#   end
-# end
+    it "routes to #destroy" do
+      expect(delete: "api/v1/organisations/1/teams/1").to route_to("api/v1/teams#destroy", id: "1", organisation_id: "1")
+    end
+
+    it "routes to #show_members" do
+      expect(get: "api/v1/organisations/1/teams/1/members").to route_to("api/v1/teams#show_members", id: "1", organisation_id: "1")
+    end
+
+    it "routes to #remove_member" do
+      expect(delete: "api/v1/organisations/1/teams/1/remove").to route_to("api/v1/teams#remove_member", id: "1", organisation_id: "1")
+    end
+
+    it "routes to #add_member" do
+      expect(post: "api/v1/organisations/1/teams/1/add").to route_to("api/v1/teams#add_member", id: "1", organisation_id: "1")
+    end
+  end
+end
