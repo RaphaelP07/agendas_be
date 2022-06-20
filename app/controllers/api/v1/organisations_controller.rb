@@ -50,7 +50,18 @@ module Api
 
       # DELETE /organisations/1
       def destroy
+        if not_admin
+          render json: {
+            message: "Only the admin can delete the organisation."
+            }, status: :method_not_allowed
+          return
+        end
+
         @organisation.destroy
+
+        render json: {
+          message: "Successfully deleted organisation."
+        }, status: :ok
       end
 
       def join
@@ -79,7 +90,6 @@ module Api
 
       def remove_member
         not_in_org = @organisation.users.include?(member) == false
-        not_admin = @organisation.admin != @user
         
         if not_in_org
           render json: {
@@ -90,7 +100,7 @@ module Api
 
         if not_admin
           render json: {
-            message: "Only admin can delete members."
+            message: "Only the admin can delete members."
             }, status: :method_not_allowed
           return
         end
