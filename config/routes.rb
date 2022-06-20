@@ -18,6 +18,8 @@ Rails.application.routes.draw do
       
       resources :organisations do
         resources :teams
+        post '/teams/:id/add', to: 'teams#add_member'
+        post '/teams/:id/remove', to: 'teams#remove_member'
       end
       post '/organisations/join', to: 'organisations#join'
       get '/rooms', to: 'daily_co#rooms'
