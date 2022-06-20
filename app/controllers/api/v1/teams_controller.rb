@@ -2,7 +2,7 @@ module Api
   module V1
     class TeamsController < ApplicationController
       before_action :authenticate_api_v1_user!
-      before_action :set_team, only: %i[ show update destroy add_member remove_member ]
+      before_action :set_team, only: %i[ show update destroy show_members add_member remove_member ]
       before_action :get_organisation, only: %i[ index create update ]
       before_action :get_user, only: %i[ create ]
       respond_to :json
@@ -73,6 +73,10 @@ module Api
         render json: {
           message: "Successfully deleted team."
         }, status: :ok
+      end
+
+      def show_members
+        render json: @team.users
       end
 
       def add_member
