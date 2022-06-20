@@ -2,10 +2,11 @@ module Api
   module V1
     class TeamsController < ApplicationController
       before_action :set_team, only: %i[ show update destroy add_member ]
+      before_action :get_organisation, only: %i[ index create update ]
 
       # GET /teams
       def index
-        @teams = @organisation.teams.all
+        @teams = @organisation.teams
 
         render json: @teams
       end
@@ -37,6 +38,23 @@ module Api
 
       # PATCH/PUT /teams/1
       def update
+        same_name = @team['name'] == team_params['name']
+        team_already_exists = @organisation.teams.exists?(name: team_params['name'])
+
+        if same_name
+          render json: {
+            message: "Edited team name cannot be the same as the orginal name."
+          }, status: :bad_request
+          return
+        end
+
+        if team_already_exists
+          render json: {
+            message: "This team name is already taken in this organisation."
+          }, status: :bad_request
+          return
+        end
+
         if @team.update(team_params)
           render json: @team
         else
@@ -61,11 +79,7 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_team
-        @team = Organisation.teams.find(params[:id])
-      end
-
-      def get_organisation
-        @organisation = Organisation.find(params[:organisation_id])
+        @team = Organisation.find(params[:organisation_id]).teams.find(params[:id])
       end
 
       def get_user
