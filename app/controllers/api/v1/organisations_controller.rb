@@ -28,7 +28,7 @@ module Api
 
       # POST /organisations
       def create
-        @organisation = @user.organisations.new(organisation_params)
+        @organisation = @user.organisations.new(org_params)
 
         if @organisation.save
           @organisation.update(link: generate_string(@organisation[:name]))
@@ -41,7 +41,31 @@ module Api
 
       # PATCH/PUT /organisations/1
       def update
-        if @organisation.update(organisation_params)
+        if not_admin
+          render json: {
+            message: "Only the admin can update the organisation info."
+            }, status: :method_not_allowed
+          return
+        end
+
+        same_name = @organisation['name'] == org_params['name']
+        org_already_exists = Organisation.all.exists?(name: org_params['name'])
+
+        if same_name
+          render json: {
+            message: "Edited organisation name cannot be the same as the orginal name."
+          }, status: :bad_request
+          return
+        end
+
+        if org_already_exists
+          render json: {
+            message: "This organisation name is already taken."
+          }, status: :bad_request
+          return
+        end
+
+        if @organisation.update(org_params)
           render json: @organisation
         else
           render json: @organisation.errors, status: :unprocessable_entity
@@ -127,7 +151,7 @@ module Api
         @user = current_api_v1_user
       end
 
-      def organisation_params
+      def org_params
         params.require(:organisation).permit(:name, :city_address, :link)
       end
 
