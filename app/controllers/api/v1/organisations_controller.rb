@@ -2,7 +2,6 @@ module Api
   module V1
     class OrganisationsController < ApplicationController
       before_action :authenticate_api_v1_user!
-      # before_action :member_is_not_in_org
       before_action :set_organisation, only: %i[ show update destroy show_members remove_member ]
       before_action :get_user, only: %i[ index create show join show_members remove_member ]
       before_action :member, only: %i[ remove_member ]
@@ -165,16 +164,6 @@ module Api
         end
         string.join
       end
-
-      # def member_is_not_in_org
-      #   member_is_not_in_org = Organisation.find(params[:id]).users.exists?(current_api_v1_user['id']) == false
-
-      #   if member_is_not_in_org
-      #     render json: {
-      #       message: 'You are not part of this organisation.'
-      #     }, status: :method_not_allowed
-      #   end
-      # end
     end
   end
 end
