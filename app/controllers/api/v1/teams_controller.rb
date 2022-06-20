@@ -109,7 +109,7 @@ module Api
         @team.users.delete(member)
 
         render json: {
-          message: "Successfully deleted #{member['email']} from team."
+          message: "Successfully removed #{member['email']} from team."
         }, status: :ok
       end
 
@@ -122,10 +122,6 @@ module Api
 
       def get_user
         @user = current_api_v1_user
-      end
-
-      def member
-        User.find(params[:user_id])
       end
 
       # Only allow a list of trusted parameters through.

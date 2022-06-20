@@ -2,8 +2,8 @@ module Api
   module V1
     class OrganisationsController < ApplicationController
       before_action :authenticate_api_v1_user!
-      before_action :set_organisation, only: %i[ show update destroy create_team ]
-      before_action :get_user, only: %i[ index create show join create_team ]
+      before_action :set_organisation, only: %i[ show update destroy remove_member ]
+      before_action :get_user, only: %i[ index create show join remove_member ]
       respond_to :json
 
       # GET /organisations
@@ -76,6 +76,31 @@ module Api
         end
       end
 
+      def remove_member
+        not_in_org = @organisation.users.include?(member) == false
+        not_admin = @organisation.admin != @user
+        
+        if not_in_org
+          render json: {
+            message: "This user is not in this org."
+            }, status: :bad_request
+          return
+        end
+
+        if not_admin
+          render json: {
+            message: "Only admin can delete members."
+            }, status: :method_not_allowed
+          return
+        end
+        
+        @organisation.users.delete(member)
+
+        render json: {
+          message: "Successfully removed #{member['email']} from organisation."
+        }, status: :ok
+      end
+
       private
 
       def set_organisation
@@ -84,6 +109,10 @@ module Api
 
       def get_user
         @user = current_api_v1_user
+      end
+
+      def member
+        User.find(params[:user_id])
       end
 
       def organisation_params
