@@ -5,6 +5,7 @@ module Api
       before_action :set_team, only: %i[ show update destroy show_members add_member remove_member ]
       before_action :get_organisation, only: %i[ index create update ]
       before_action :get_user, only: %i[ create ]
+      before_action :member, only: %i[ remove_member ]
       respond_to :json
 
       # GET /teams

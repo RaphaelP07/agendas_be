@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       end
       post '/organisations/join', to: 'organisations#join'
       delete '/organisations/:id/remove', to: 'organisations#remove_member'
+      get '/organisations/:id/members', to: 'organisations#show_members'
       get '/rooms', to: 'daily_co#rooms'
       get '/room/:name', to: 'daily_co#room'
     end

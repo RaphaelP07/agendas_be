@@ -2,8 +2,9 @@ module Api
   module V1
     class OrganisationsController < ApplicationController
       before_action :authenticate_api_v1_user!
-      before_action :set_organisation, only: %i[ show update destroy remove_member ]
-      before_action :get_user, only: %i[ index create show join remove_member ]
+      before_action :set_organisation, only: %i[ show update destroy show_members remove_member ]
+      before_action :get_user, only: %i[ index create show join show_members remove_member ]
+      before_action :member, only: %i[ remove_member ]
       respond_to :json
 
       # GET /organisations
@@ -101,6 +102,11 @@ module Api
         }, status: :ok
       end
 
+      def show_members
+        render json: @organisation.users
+        # render json: @organisation.users.where.not(id: @user.id)
+      end
+
       private
 
       def set_organisation
@@ -109,10 +115,6 @@ module Api
 
       def get_user
         @user = current_api_v1_user
-      end
-
-      def member
-        User.find(params[:user_id])
       end
 
       def organisation_params
