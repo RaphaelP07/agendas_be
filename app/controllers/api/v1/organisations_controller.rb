@@ -3,7 +3,7 @@ module Api
     class OrganisationsController < ApplicationController
       before_action :authenticate_api_v1_user!
       before_action :set_organisation, only: %i[ show update destroy create_team ]
-      before_action :get_user, only: %i[ index create join create_team ]
+      before_action :get_user, only: %i[ index create show join create_team ]
       respond_to :json
 
       # GET /organisations
@@ -15,7 +15,14 @@ module Api
 
       # GET /organisations/1
       def show
-        render json: @organisation
+        member_is_in_org = @organisation.users.exists?(@user.id)
+        if member_is_in_org
+          render json: @organisation
+        else
+          render json: {
+            message: 'You are not part of this organisation.'
+          }, status: :not_found
+        end
       end
 
       # POST /organisations
