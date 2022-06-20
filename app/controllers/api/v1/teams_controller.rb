@@ -1,8 +1,11 @@
 module Api
   module V1
     class TeamsController < ApplicationController
+      before_action :authenticate_api_v1_user!
       before_action :set_team, only: %i[ show update destroy add_member ]
       before_action :get_organisation, only: %i[ index create update ]
+      before_action :get_user, only: %i[ create ]
+      respond_to :json
 
       # GET /teams
       def index
@@ -19,7 +22,8 @@ module Api
       # POST /teams
       def create
         @team = @organisation.teams.new(team_params)
-        team_already_exists = @organisation.teams.include?(@team)
+        team_already_exists = @organisation.teams.exists?(name: team_params['name'])
+
 
         if team_already_exists
           render json: {
@@ -30,7 +34,7 @@ module Api
 
         if @team.save
           @team.users << @user
-          render json: @team, status: :created, location: @team
+          render json: @team, status: :created
         else
           render json: @team.errors, status: :unprocessable_entity
         end
@@ -65,6 +69,10 @@ module Api
       # DELETE /teams/1
       def destroy
         @team.destroy
+
+        render json: {
+          message: "Successfully deleted team."
+        }, status: :ok
       end
 
       def add_member
@@ -87,7 +95,7 @@ module Api
       end
 
       def member
-        User.find(params[:user_id])
+        params.permit(:id)
       end
 
       # Only allow a list of trusted parameters through.
