@@ -16,9 +16,13 @@ RSpec.describe "/organisations", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Organisation. As you add validations to Organisation, be sure to
   # adjust the attributes here as well.
+  before do
+    sign_in create(:user)
+  end
+
   let(:valid_attributes) {
     {
-      name: "Agendas"
+      name: "Agendas",
       city_address: "Manila"
     }
   }
