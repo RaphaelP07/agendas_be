@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  
+  # default_url_options :host => "localhost:3000"
   namespace :api do
     namespace :v1 do
       get '/current_user', to: 'current_user#index'

@@ -16,9 +16,11 @@ RSpec.describe "/organisations", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Organisation. As you add validations to Organisation, be sure to
   # adjust the attributes here as well.
-  before do
-    sign_in create(:user)
-  end
+
+  # let(:user) { FactoryBot.build(:user, email: 'raph@test.com', password: 'asdasdasd') }
+  # before do
+  #   user = FactoryBot.build(:user, email: 'raph@test.com', password: 'asdasdasd')
+  # end
 
   let(:valid_attributes) {
     {
@@ -38,11 +40,14 @@ RSpec.describe "/organisations", type: :request do
   # OrganisationsController, or in your router and rack
   # middleware. Be sure to keep this updated too.
   let(:valid_headers) {
-    {}
+    {
+      authorization: ""
+    }
   }
-
+  
   describe "GET /index" do
     it "renders a successful response" do
+      # debugger
       Organisation.create! valid_attributes
       get api_v1_organisations_url, headers: valid_headers, as: :json
       expect(response).to be_successful
