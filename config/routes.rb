@@ -21,6 +21,7 @@ Rails.application.routes.draw do
         get '/teams/:id/members', to: 'teams#show_members'
         post '/teams/:id/add', to: 'teams#add_member'
         delete '/teams/:id/remove', to: 'teams#remove_member'
+        resources :meetings
       end
       post '/organisations/join', to: 'organisations#join'
       delete '/organisations/:id/remove', to: 'organisations#remove_member'
