@@ -23,8 +23,7 @@ module Api
       # POST /meetings
       def create
         @meeting = @organisation.meetings.new(meeting_params)
-        meeting_already_exists = @organisation.meetings.exists?(name: meeting_params['name'])
-
+        meeting_already_exists = @organisation.meetings.exists?(agenda: meeting_params['agenda'])
 
         if meeting_already_exists
           render json: {
@@ -43,23 +42,6 @@ module Api
 
       # PATCH/PUT /meetings/1
       def update
-        same_name = @meeting['name'] == meeting_params['name']
-        meeting_already_exists = @organisation.meetings.exists?(name: meeting_params['name'])
-
-        if same_name
-          render json: {
-            message: "Edited meeting name cannot be the same as the orginal name."
-          }, status: :bad_request
-          return
-        end
-
-        if meeting_already_exists
-          render json: {
-            message: "This meeting name is already taken in this organisation."
-          }, status: :bad_request
-          return
-        end
-
         if @meeting.update(meeting_params)
           render json: @meeting
         else
@@ -80,38 +62,7 @@ module Api
         render json: @meeting.users
       end
 
-      def add_member
-        already_in_meeting = @meeting.users.include?(member)
-        
-        if already_in_meeting
-          render json: {
-            message: "#{member[:email]} is already in this meeting."
-            }, status: :bad_request
-          return
-        end
-          
-        @meeting.users << member
-
-        render json: {
-          message: "Successfully added #{member['email']} to meeting."
-        }, status: :ok
-      end
-
-      def remove_member
-        not_in_meeting = @meeting.users.include?(member) == false
-        
-        if not_in_meeting
-          render json: {
-            message: "This user is not in this meeting."
-            }, status: :bad_request
-          return
-        end
-        
-        @meeting.users.delete(member)
-
-        render json: {
-          message: "Successfully removed #{member['email']} from meeting."
-        }, status: :ok
+      def send_invites
       end
 
       private
@@ -127,7 +78,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def meeting_params
-        params.require(:meeting).permit(:name)
+        params.require(:meeting).permit(:agenda, :notes)
       end
     end
   end
