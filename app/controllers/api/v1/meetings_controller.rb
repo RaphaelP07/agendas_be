@@ -27,7 +27,7 @@ module Api
 
         if meeting_already_exists
           render json: {
-            message: "This meeting name already taken."
+            message: "This meeting name is already taken."
           }, status: :bad_request
           return
         end
@@ -77,11 +77,11 @@ module Api
         }, status: :ok
       end
 
-      def show_members
+      def show_participants
         render json: @meeting.users
       end
 
-      def send_invites
+      def send_invite
       end
 
       private
