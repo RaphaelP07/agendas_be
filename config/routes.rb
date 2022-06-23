@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  # default_url_options :host => "localhost:3000"
+  default_url_options :host => "localhost:3000"
   namespace :api do
     namespace :v1 do
       get '/current_user', to: 'current_user#index'
@@ -16,6 +16,11 @@ Rails.application.routes.draw do
         omniauth_callbacks: 'api/v1/users/omniauth'
       }
       
+      get '/organisations/admin_of', to: 'organisations#admin_of'
+      post '/organisations/join', to: 'organisations#join'
+      post '/organisations/:id/invite', to: 'organisations#invite_to_org'
+      delete '/organisations/:id/remove', to: 'organisations#remove_member'
+      get '/organisations/:id/members', to: 'organisations#show_members'
       resources :organisations do
         resources :teams
         get '/teams/:id/members', to: 'teams#show_members'
@@ -24,9 +29,6 @@ Rails.application.routes.draw do
         resources :meetings
         post '/meetings/:id/send_invite', to: 'meetings#send_invite'
       end
-      post '/organisations/join', to: 'organisations#join'
-      delete '/organisations/:id/remove', to: 'organisations#remove_member'
-      get '/organisations/:id/members', to: 'organisations#show_members'
       get '/rooms', to: 'daily_co#rooms'
       get '/room/:name', to: 'daily_co#room'
     end

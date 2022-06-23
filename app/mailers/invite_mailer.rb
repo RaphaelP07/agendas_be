@@ -16,4 +16,15 @@ class InviteMailer < ApplicationMailer
       subject: 'Agendas Meeting Invite'
     ) 
   end
+
+  def invite_to_org
+    @organisation = params[:organisation]
+    @greeting = "Good day"
+
+    mail(
+      to: params[:email], 
+      # cc: 'admin',
+      subject: 'Agendas Organisation Invite'
+    ) 
+  end
 end

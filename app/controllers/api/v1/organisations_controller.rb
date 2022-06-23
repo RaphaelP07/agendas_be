@@ -2,14 +2,22 @@ module Api
   module V1
     class OrganisationsController < ApplicationController
       before_action :authenticate_api_v1_user!
-      before_action :set_organisation, only: %i[ show update destroy show_members remove_member ]
-      before_action :get_user, only: %i[ index create show join show_members remove_member ]
+      before_action :set_organisation, only: %i[ show update destroy show_members remove_member invite_to_org ]
+      before_action :get_user, only: %i[ index admin_of create show join show_members remove_member ]
       before_action :member, only: %i[ remove_member ]
+      # before_action :member_is_not_in_org
       respond_to :json
 
       # GET /organisations
       def index
-        @organisations = @user.organisations.all
+        @organisations = Organisation.all.select {
+                          |org| org.users.find(@user['id'])
+                        }
+        render json: @organisations
+      end
+
+      def admin_of
+        @organisations = @user.organisations
 
         render json: @organisations
       end
@@ -132,6 +140,20 @@ module Api
       def show_members
         render json: @organisation.users
         # render json: @organisation.users.where.not(id: @user.id)
+      end
+
+      def invite_to_org
+        if not_admin
+          render json: {
+            message: "Only the admin can invite members."
+          }, status: :method_not_allowed
+          return
+        end
+        InviteMailer.with(email: params[:email], organisation: @organisation).invite_to_org.deliver_later
+        render json: {
+          recipient: params[:email],
+          organisation: @organisation
+        }, status: :ok
       end
 
       private
