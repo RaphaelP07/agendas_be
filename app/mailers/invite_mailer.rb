@@ -6,8 +6,14 @@ class InviteMailer < ApplicationMailer
   #   en.invite_mailer.send_invite.subject
   #
   def send_invite
-    @greeting = "Hi"
+    @user = params[:user]
+    @meeting = params[:meeting]
+    @greeting = "Good day"
 
-    mail to: "to@example.org"
+    mail(
+      to: @user['email'], 
+      # cc: 'admin',
+      subject: 'Agendas Meeting Invite'
+    ) 
   end
 end

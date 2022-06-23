@@ -1,5 +1,9 @@
-<h1>Invite#send_invite</h1>
+<h1>Agendas Invitation</h1>
 
 <p>
-  <%= @greeting %>, find me in app/views/invite_mailer/send_invite.html.erb
+<%= @greeting %> <%= @user.email %>, you are invited to a meeting in your organisation: <%= @meeting.organisation.name %>.
+<br/>
+This meeting is scheduled at <%= @meeting.schedule %>.
+<br/>
+You can join by opening this link: <%= @meeting.url %>
 </p>

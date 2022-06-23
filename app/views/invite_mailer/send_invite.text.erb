@@ -1,3 +1,7 @@
-Invite#send_invite
+Agendas Invitation
 
-<%= @greeting %>, find me in app/views/invite_mailer/send_invite.text.erb
+<%= @greeting %> <%= @user.email %>, you are invited to a meeting in your organisation: <%= @meeting.organisation.name %>.
+
+This meeting is scheduled at <%= @meeting.schedule %>.
+
+You can join by opening this link: <%= @meeting.url %>

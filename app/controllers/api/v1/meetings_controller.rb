@@ -2,10 +2,10 @@ module Api
   module V1
     class MeetingsController < ApplicationController
       before_action :authenticate_api_v1_user!
-      before_action :set_meeting, only: %i[ show update destroy show_members add_member remove_member ]
+      before_action :set_meeting, only: %i[ show update destroy show_members send_invite ]
       before_action :get_organisation, only: %i[ index create update ]
       before_action :get_user, only: %i[ create ]
-      before_action :member, only: %i[ remove_member ]
+      before_action :member, only: %i[ send_invite ]
       respond_to :json
 
       # GET /meetings
@@ -82,6 +82,11 @@ module Api
       end
 
       def send_invite
+        InviteMailer.with(user: member, meeting: @meeting).send_invite.deliver_later
+        render json: {
+          recipient: member['email'],
+          url: @meeting['url']
+        }, status: :ok
       end
 
       private
