@@ -1,11 +1,9 @@
 module Api
   module V1
     class OrganisationsController < ApplicationController
-      before_action :authenticate_api_v1_user!
       before_action :set_organisation, only: %i[ show update destroy show_members remove_member invite_to_org ]
       before_action :get_user, only: %i[ index admin_of create show join show_members remove_member ]
       before_action :member, only: %i[ remove_member ]
-      # before_action :member_is_not_in_org
       respond_to :json
 
       # GET /organisations

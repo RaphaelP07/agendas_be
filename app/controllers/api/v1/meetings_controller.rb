@@ -1,7 +1,6 @@
 module Api
   module V1
     class MeetingsController < ApplicationController
-      before_action :authenticate_api_v1_user!
       before_action :set_meeting, only: %i[ show update destroy show_members send_invite ]
       before_action :get_organisation, only: %i[ index create update ]
       before_action :get_user, only: %i[ create ]
