@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get '/current_user', to: 'current_user#index'
+      post '/users/name', to: 'current_user#name'
       devise_for :users, path: '', path_names: {
         sign_in: 'login',
         sign_out: 'logout',
