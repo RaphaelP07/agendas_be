@@ -23,18 +23,36 @@ module Api
       # POST /meetings
       def create
         @meeting = @organisation.meetings.new(meeting_params)
-        meeting_already_exists = @organisation.meetings.exists?(agenda: meeting_params['agenda'])
+        meeting_already_exists = @organisation.meetings.exists?(name: meeting_params['name'])
 
         if meeting_already_exists
           render json: {
-            message: "This meeting name already taken in this organisation."
+            message: "This meeting name already taken."
           }, status: :bad_request
           return
         end
 
+        meeting_is_sync = @meeting['synchronicity'] == "sync"
+
+        if meeting_is_sync
+          response = DailyCo::Client::create_room(meeting_params)
+          room_creation_failed = response[:code] != 200
+
+          if room_creation_failed
+            render json: {
+              error: response[:data]
+            }, status: :bad_request
+            return
+          end
+        else
+        end
+
         if @meeting.save
+          @meeting.update(url: response[:data]['url']) if meeting_is_sync
           @meeting.users << @user
-          render json: @meeting, status: :created
+          render json: {
+            data: @meeting
+          }, status: :created
         else
           render json: @meeting.errors, status: :unprocessable_entity
         end
@@ -52,6 +70,7 @@ module Api
       # DELETE /meetings/1
       def destroy
         @meeting.destroy
+        DailyCo::Client::delete_room(@meeting['url'].split('', 26)[-1])
 
         render json: {
           message: "Successfully deleted meeting."
@@ -78,7 +97,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def meeting_params
-        params.require(:meeting).permit(:agenda, :notes)
+        params.require(:meeting).permit(:name, :notes, :synchronicity, :schedule)
       end
     end
   end

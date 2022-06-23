@@ -4,10 +4,10 @@ module DailyCo
       response = Request.get_delete('get', "/rooms")
     end
 
-    def self.create_room
+    def self.create_room(params)
       payload = {
-        "name" => "getting-started-webinar",
-        "privacy" => "private",
+        "name" => '',
+        "privacy" => "public",
         "properties" => {
           "start_audio_off" => true,
           "start_video_off" => true
