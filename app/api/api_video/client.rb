@@ -7,5 +7,9 @@ module ApiVideo
     def self.get_videos
       response = Request.get('get', "/videos?currentPage=1&pageSize=25")
     end
+
+    def self.upload(video_id)
+      response = Request.upload('post', "/videos/#{video_id}/source")
+    end
   end
 end
