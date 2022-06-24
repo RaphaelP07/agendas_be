@@ -1,4 +1,4 @@
-module Shotstack
+module ApiVideo
   class Errors
     def self.map(code)
       case code

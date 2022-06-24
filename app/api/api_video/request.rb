@@ -1,4 +1,4 @@
-module Shotstack
+module ApiVideo
   class Request
     TOKEN = ENV["SHOTSTACK_KEY"]
     BASE_URL = 'https://api.shotstack.io/stage'

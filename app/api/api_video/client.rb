@@ -1,4 +1,4 @@
-module DailyCo
+module ApiVideo
   class Client
   end
 end
