@@ -32,10 +32,10 @@ Rails.application.routes.draw do
       end
       get '/rooms', to: 'daily_co#rooms'
       get '/room/:name', to: 'daily_co#room'
-      post '/auth', to: 'api_video#auth'
       get '/videos', to: 'api_video#videos'
-      post '/create', to: 'api_video#create'
+      get '/video', to: 'api_video#video'
       post '/upload', to: 'api_video#upload'
+      delete '/delete', to: 'api_video#delete'
     end
   end
 

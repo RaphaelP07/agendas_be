@@ -27,7 +27,20 @@ module ApiVideo
           'Authorization': "Basic RE5QYklDVlhGcm1VZVBWUDJiMmNYTFN3c1JLRjFNTjc2Vmp3ejRjWW5WQTo"
         }
       )
-      debugger
+      { code: result.code, status: 'Success', data: JSON.parse(result.body)}
+    rescue RestClient::ExceptionWithResponse => error
+      { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
+    end
+
+    def self.get_video(http_method, endpoint, auth)
+      result = RestClient::Request.execute(
+        method: http_method,
+        url: "#{BASE_URL}#{endpoint}",
+        headers: {
+          'Accept': 'application/json', 
+          'Content-Type': 'multipart/form-data'
+        }
+      )
       { code: result.code, status: 'Success', data: JSON.parse(result.body)}
     rescue RestClient::ExceptionWithResponse => error
       { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
@@ -65,16 +78,17 @@ module ApiVideo
       { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
     end
 
-    def self.upload(http_method, endpoint, auth)
+    def self.delete(http_method, endpoint, auth)
       result = RestClient::Request.execute(
         method: http_method,
         url: "#{BASE_URL}#{endpoint}",
         headers: {
           'Accept': 'application/json', 
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Authorization': "Bearer #{auth}"
         }
       )
-      { code: result.code, status: 'Success', data: JSON.parse(result.body)}
+      { code: result.code, status: 'Success'}
     rescue RestClient::ExceptionWithResponse => error
       { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
     end
