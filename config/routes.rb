@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       get '/room/:name', to: 'daily_co#room'
       post '/auth', to: 'api_video#auth'
       get '/videos', to: 'api_video#videos'
+      post '/create', to: 'api_video#create'
       post '/upload', to: 'api_video#upload'
     end
   end

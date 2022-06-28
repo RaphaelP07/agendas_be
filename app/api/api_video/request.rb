@@ -31,17 +31,33 @@ module ApiVideo
     rescue RestClient::ExceptionWithResponse => error
       { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
     end
+    
+    def self.create(http_method, endpoint, title)
+      result = RestClient::Request.execute(
+        method: http_method,
+        url: "#{BASE_URL}#{endpoint}",
+        headers: {
+          'Accept': 'application/json', 
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NTY0MTA5NDguMDE2NjksIm5iZiI6MTY1NjQxMDk0OC4wMTY2OSwiZXhwIjoxNjU2NDE0NTQ4LjAxNjY5LCJhcGlLZXlWYWx1ZSI6IkROUGJJQ1ZYRnJtVWVQVlAyYjJjWExTd3NSS0YxTU43NlZqd3o0Y1luVkEifQ.Jd-9Admnatqu8EAX4w9PilKXT58msekykj1Nm8kks0pCdO6UXg4ySjOT-sjZvwSZM21EVrlSwa1X-FtvM7UhddZjV7BoeoBShIA_2nMB5w-YjBNVGHCtTVplY-Bayt0MbMjlX9FAHInCI14JOrB74m8SoMx4Suv026OnT5ioIwn47ZBHuETun1Ct2HD4vxDYRK94xE_6MRbc6Xfq0I-rVi80r_rwM-8TxJVgoNorafAWNHwBsJEc4qKcrUGYeRCP-5RdjLwM_sWMMlw8iydH-xY7_SNpXcDQz6yZDnwFTWVZGp8lof-tk5iWTmyXXqE-cqslgFyJ30egU5OTSwTVdA'
+        },
+        payload: {"title": title}.to_json
+      )
+      { code: result.code, status: 'Success', data: JSON.parse(result.body)}
+    rescue RestClient::ExceptionWithResponse => error
+      { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
+    end
 
-    def self.upload(http_method, endpoint)
+    def self.upload(http_method, endpoint, pathname)
       result = RestClient::Request.execute(
         method: http_method,
         url: "#{BASE_URL}#{endpoint}",
         headers: {
           'Accept': 'application/json', 
           'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NTYwNzU1NTEuMTI1MDk1LCJuYmYiOjE2NTYwNzU1NTEuMTI1MDk1LCJleHAiOjE2NTYwNzkxNTEuMTI1MDk1LCJhcGlLZXlWYWx1ZSI6IkROUGJJQ1ZYRnJtVWVQVlAyYjJjWExTd3NSS0YxTU43NlZqd3o0Y1luVkEifQ.dME1Q0HKXt_cCUDwJatan-e490hvXBZ_Kz0aBRWcti0yXfwcRO4fbp0RnVkwI2oRFWSM2UaAd3B4J7MW8Pi9fKem-RffGtZ_CbLURe-0WzeFI5S4_7OyXZNW8L_ZXQVx9za259tB3R_csYpLNNbW1Xw6_jwzBwe9DET2c_QL1kED6hUBf30r2YSDMdDVq-Lv2wTLRCMHoVhh3bEbFbPhPtIgoE0vKzEiTDU1795hEnUIGcVUgqVrpbiBHm9QvCaBmI7V5IKK5Dcsk6Gq1x6fFVSZ_GhG83TmEbYxzJjqjiPM9Tx9VJ0ot0_fHBMglHwyKCr7pds2y0Wbw4ZnD2FSJQ'
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NTY0MTA5NDguMDE2NjksIm5iZiI6MTY1NjQxMDk0OC4wMTY2OSwiZXhwIjoxNjU2NDE0NTQ4LjAxNjY5LCJhcGlLZXlWYWx1ZSI6IkROUGJJQ1ZYRnJtVWVQVlAyYjJjWExTd3NSS0YxTU43NlZqd3o0Y1luVkEifQ.Jd-9Admnatqu8EAX4w9PilKXT58msekykj1Nm8kks0pCdO6UXg4ySjOT-sjZvwSZM21EVrlSwa1X-FtvM7UhddZjV7BoeoBShIA_2nMB5w-YjBNVGHCtTVplY-Bayt0MbMjlX9FAHInCI14JOrB74m8SoMx4Suv026OnT5ioIwn47ZBHuETun1Ct2HD4vxDYRK94xE_6MRbc6Xfq0I-rVi80r_rwM-8TxJVgoNorafAWNHwBsJEc4qKcrUGYeRCP-5RdjLwM_sWMMlw8iydH-xY7_SNpXcDQz6yZDnwFTWVZGp8lof-tk5iWTmyXXqE-cqslgFyJ30egU5OTSwTVdA'
         },
-        upload: {"file": File.open("/Users/rpadua/Desktop/Movie.mov")}
+        payload: {file: File.open("/Users/rpadua/Desktop/Movie.mov"), multipart: true }
       )
       { code: result.code, status: 'Success', data: JSON.parse(result.body)}
     rescue RestClient::ExceptionWithResponse => error
