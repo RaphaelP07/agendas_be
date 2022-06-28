@@ -8,12 +8,16 @@ module ApiVideo
       response = Request.get('get', "/videos?currentPage=1&pageSize=25")
     end
 
-    def self.create(title)
-      response = Request.create('post', "/videos", title)
+    def self.create(auth, title)
+      response = Request.create('post', "/videos", auth, title)
     end
 
-    def self.upload(video_id)
-      response = Request.upload('post', "/videos/#{video_id}/source")
+    def self.upload(auth, video_id, pathname)
+      response = Request.upload('post', "/videos/#{video_id}/source", auth, pathname)
+    end
+
+    def self.delete(auth, video_id)
+      response = Request.delete('delete', "/videos/#{video_id}", auth)
     end
   end
 end

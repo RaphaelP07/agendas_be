@@ -27,19 +27,20 @@ module ApiVideo
           'Authorization': "Basic RE5QYklDVlhGcm1VZVBWUDJiMmNYTFN3c1JLRjFNTjc2Vmp3ejRjWW5WQTo"
         }
       )
+      debugger
       { code: result.code, status: 'Success', data: JSON.parse(result.body)}
     rescue RestClient::ExceptionWithResponse => error
       { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
     end
     
-    def self.create(http_method, endpoint, title)
+    def self.create(http_method, endpoint, auth, title)
       result = RestClient::Request.execute(
         method: http_method,
         url: "#{BASE_URL}#{endpoint}",
         headers: {
           'Accept': 'application/json', 
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NTY0MTA5NDguMDE2NjksIm5iZiI6MTY1NjQxMDk0OC4wMTY2OSwiZXhwIjoxNjU2NDE0NTQ4LjAxNjY5LCJhcGlLZXlWYWx1ZSI6IkROUGJJQ1ZYRnJtVWVQVlAyYjJjWExTd3NSS0YxTU43NlZqd3o0Y1luVkEifQ.Jd-9Admnatqu8EAX4w9PilKXT58msekykj1Nm8kks0pCdO6UXg4ySjOT-sjZvwSZM21EVrlSwa1X-FtvM7UhddZjV7BoeoBShIA_2nMB5w-YjBNVGHCtTVplY-Bayt0MbMjlX9FAHInCI14JOrB74m8SoMx4Suv026OnT5ioIwn47ZBHuETun1Ct2HD4vxDYRK94xE_6MRbc6Xfq0I-rVi80r_rwM-8TxJVgoNorafAWNHwBsJEc4qKcrUGYeRCP-5RdjLwM_sWMMlw8iydH-xY7_SNpXcDQz6yZDnwFTWVZGp8lof-tk5iWTmyXXqE-cqslgFyJ30egU5OTSwTVdA'
+          'Authorization': "Bearer #{auth}"
         },
         payload: {"title": title}.to_json
       )
@@ -48,16 +49,30 @@ module ApiVideo
       { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
     end
 
-    def self.upload(http_method, endpoint, pathname)
+    def self.upload(http_method, endpoint, auth, pathname)
       result = RestClient::Request.execute(
         method: http_method,
         url: "#{BASE_URL}#{endpoint}",
         headers: {
           'Accept': 'application/json', 
           'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NTY0MTA5NDguMDE2NjksIm5iZiI6MTY1NjQxMDk0OC4wMTY2OSwiZXhwIjoxNjU2NDE0NTQ4LjAxNjY5LCJhcGlLZXlWYWx1ZSI6IkROUGJJQ1ZYRnJtVWVQVlAyYjJjWExTd3NSS0YxTU43NlZqd3o0Y1luVkEifQ.Jd-9Admnatqu8EAX4w9PilKXT58msekykj1Nm8kks0pCdO6UXg4ySjOT-sjZvwSZM21EVrlSwa1X-FtvM7UhddZjV7BoeoBShIA_2nMB5w-YjBNVGHCtTVplY-Bayt0MbMjlX9FAHInCI14JOrB74m8SoMx4Suv026OnT5ioIwn47ZBHuETun1Ct2HD4vxDYRK94xE_6MRbc6Xfq0I-rVi80r_rwM-8TxJVgoNorafAWNHwBsJEc4qKcrUGYeRCP-5RdjLwM_sWMMlw8iydH-xY7_SNpXcDQz6yZDnwFTWVZGp8lof-tk5iWTmyXXqE-cqslgFyJ30egU5OTSwTVdA'
+          'Authorization': "Bearer #{auth}"
         },
-        payload: {file: File.open("/Users/rpadua/Desktop/Movie.mov"), multipart: true }
+        payload: {file: File.open(pathname), multipart: true }
+      )
+      { code: result.code, status: 'Success', data: JSON.parse(result.body)}
+    rescue RestClient::ExceptionWithResponse => error
+      { code: error.http_code, status: error.message, data: Errors.map(error.http_code)}
+    end
+
+    def self.upload(http_method, endpoint, auth)
+      result = RestClient::Request.execute(
+        method: http_method,
+        url: "#{BASE_URL}#{endpoint}",
+        headers: {
+          'Accept': 'application/json', 
+          'Content-Type': 'multipart/form-data'
+        }
       )
       { code: result.code, status: 'Success', data: JSON.parse(result.body)}
     rescue RestClient::ExceptionWithResponse => error

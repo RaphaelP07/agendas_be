@@ -18,7 +18,9 @@ module Api
       end
 
       def upload
-        upload = ApiVideo::Client.upload(params[:video_id])
+        auth = ApiVideo::Client.auth
+        create = ApiVideo::Client.create(auth[:data]['access_token'], params[:title])
+        upload = ApiVideo::Client.upload(auth[:data]['access_token'], create[:data]['videoId'], params[:pathname])
         render json: upload
       end
     end
