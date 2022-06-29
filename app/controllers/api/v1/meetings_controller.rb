@@ -32,8 +32,8 @@ module Api
         end
 
         meeting_is_sync = @meeting['synchronicity'] == "sync"
-        room_creation_failed = response[:code] != 200
         response = DailyCo::Client::create_room(meeting_params) if meeting_is_sync
+        room_creation_failed = response[:code] != 200
 
         if room_creation_failed
           render json: {
