@@ -12,7 +12,12 @@ module Api
         render json: video
       end
 
-       def upload
+      def status
+        video = ApiVideo::Client.status(params[:videoId])
+        render json: video
+      end
+
+      def upload
         auth = ApiVideo::Client.auth
         create = ApiVideo::Client.create(auth[:data]['access_token'], params[:title])
         upload = ApiVideo::Client.upload(auth[:data]['access_token'], create[:data]['videoId'], params[:pathname])

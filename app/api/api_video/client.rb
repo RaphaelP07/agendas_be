@@ -9,7 +9,11 @@ module ApiVideo
     end
 
     def self.get_video(video_id)
-      response = Request.delete('delete', "/videos/#{video_id}")
+      response = Request.get('get', "/videos/#{video_id}")
+    end
+
+    def self.status(video_id)
+      response = Request.get('get', "/videos/#{video_id}/status")
     end
 
     def self.create(auth, title)

@@ -31,12 +31,17 @@ Rails.application.routes.draw do
         post '/meetings/:id/invite', to: 'meetings#send_invite'
         get '/meetings/:id/participants', to: 'meetings#show_participants'
       end
+
+      # Third-party APIs
       get '/rooms', to: 'daily_co#rooms'
       get '/room/:name', to: 'daily_co#room'
       get '/videos', to: 'api_video#videos'
       get '/video', to: 'api_video#video'
+      get '/video/status', to: 'api_video#status'
       post '/upload', to: 'api_video#upload'
       delete '/delete', to: 'api_video#delete'
+      get '/templates', to: 'shotstack#templates'
+      post '/render', to: 'shotstack#render_meeting'
     end
   end
 
