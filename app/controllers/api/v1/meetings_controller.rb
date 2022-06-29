@@ -1,7 +1,7 @@
 module Api
   module V1
     class MeetingsController < ApplicationController
-      before_action :set_meeting, only: %i[ show update destroy show_members send_invite ]
+      before_action :set_meeting, only: %i[ show update destroy show_participants send_invite ]
       before_action :get_organisation, only: %i[ index create update ]
       before_action :get_user, only: %i[ create ]
       before_action :member, only: %i[ send_invite ]
@@ -32,18 +32,19 @@ module Api
         end
 
         meeting_is_sync = @meeting['synchronicity'] == "sync"
+        room_creation_failed = response[:code] != 200
 
         if meeting_is_sync
           response = DailyCo::Client::create_room(meeting_params)
-          room_creation_failed = response[:code] != 200
-
-          if room_creation_failed
-            render json: {
-              error: response[:data]
-            }, status: :bad_request
-            return
-          end
         else
+          
+        end
+
+        if room_creation_failed
+          render json: {
+            error: response[:data]
+            }, status: :bad_request
+          return
         end
 
         if @meeting.save
@@ -77,14 +78,17 @@ module Api
       end
 
       def show_participants
-        render json: @meeting.users
+        render json: {
+          meeting: @meeting,
+          users: @meeting.users
+        }
       end
 
       def send_invite
         InviteMailer.with(user: member, meeting: @meeting).send_invite.deliver_later
         render json: {
           recipient: member['email'],
-          url: @meeting['url']
+          meeting: @meeting
         }, status: :ok
       end
 

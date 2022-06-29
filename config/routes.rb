@@ -28,7 +28,8 @@ Rails.application.routes.draw do
         post '/teams/:id/add', to: 'teams#add_member'
         delete '/teams/:id/remove', to: 'teams#remove_member'
         resources :meetings
-        post '/meetings/:id/send_invite', to: 'meetings#send_invite'
+        post '/meetings/:id/invite', to: 'meetings#send_invite'
+        get '/meetings/:id/participants', to: 'meetings#show_participants'
       end
       get '/rooms', to: 'daily_co#rooms'
       get '/room/:name', to: 'daily_co#room'

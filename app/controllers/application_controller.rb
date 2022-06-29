@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
   end
 
   def member
-    User.find(params[:user_id])
+    User.find_by(params[:email])
   end
 
   def not_admin
