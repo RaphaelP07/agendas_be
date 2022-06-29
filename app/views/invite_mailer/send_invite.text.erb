@@ -4,4 +4,6 @@ Agendas Invitation
 
 This meeting is scheduled at <%= @meeting.schedule %>.
 
+This meeting is <%= @meeting.synchronicity == "sync" ? "synchronous" : "asynchronous" %>.
+
 You can join by opening this link: <%= @meeting.url %>

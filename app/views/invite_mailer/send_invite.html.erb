@@ -5,5 +5,7 @@
 <br/>
 This meeting is scheduled at <%= @meeting.schedule %>.
 <br/>
-You can join by opening this link: <%= @meeting.url %>
+This meeting is <%= @meeting.synchronicity == "sync" ? "synchronous" : "asynchronous" %>.
+<br/>
+You can participate by opening this link: <%= @meeting.url %>
 </p>
