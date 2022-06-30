@@ -25,7 +25,12 @@ module Api
         auth = ApiVideo::Client.auth
         create = ApiVideo::Client.create(auth[:data]['access_token'], video_params['name'])
         upload = ApiVideo::Client.upload(auth[:data]['access_token'], create[:data]['videoId'], video_params['pathname'])
-        status = ApiVideo::Client.status(upload[:data]['videoId'])
+        status = ApiVideo::Client.status(create[:data]['videoId'])
+
+        while status[:data]['encoding']['metadata']['duration'] == nil
+          sleep 3
+          status = ApiVideo::Client.status(create[:data]['videoId'])
+        end
 
         upload_failed = [
           auth[:code] != 200,
@@ -44,21 +49,14 @@ module Api
 
         if @video.save
           @video.update(
+            video_type: 'user upload',
             upload_status: status[:data]['ingest']['status'],
-            duration: status[:data]['metadata']['duration'],
+            duration: status[:data]['encoding']['metadata']['duration'],
             embed_url: upload[:data]['assets']['player'],
-            source_url: upload[:data]['assets']['mp4']
+            source_url: upload[:data]['assets']['mp4'],
+            api_video_id: upload[:data]['videoId']
           )
-          render json: @video, status: :created, location: @video
-        else
-          render json: @video.errors, status: :unprocessable_entity
-        end
-      end
-
-      # PATCH/PUT /videos/1
-      def update
-        if @video.update(video_params)
-          render json: @video
+          render json: @video, status: :created
         else
           render json: @video.errors, status: :unprocessable_entity
         end
@@ -67,6 +65,15 @@ module Api
       # DELETE /videos/1
       def destroy
         @video.destroy
+        auth = ApiVideo::Client.auth
+        delete = ApiVideo::Client.delete(auth[:data]['access_token'], params[:videoId])
+      
+        render json: {
+          message: "Successfully deleted meeting."
+        }, status: :ok
+      end
+
+      def render_meeting
       end
 
       private
@@ -86,7 +93,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def video_params
-        params.require(:video).permit(:name, :pathname)
+        params.require(:video).permit(:name, :pathname, :user_id)
       end
     end
   end
