@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_30_102128) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_30_103543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -103,7 +103,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_102128) do
   create_table "videos", force: :cascade do |t|
     t.string "name"
     t.string "upload_status"
-    t.string "duration"
     t.string "render_id"
     t.string "render_status"
     t.string "embed_url"
@@ -114,6 +113,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_102128) do
     t.datetime "updated_at", null: false
     t.text "pathname"
     t.string "video_type"
+    t.integer "duration"
     t.index ["meeting_id"], name: "index_videos_on_meeting_id"
     t.index ["user_id"], name: "index_videos_on_user_id"
   end
