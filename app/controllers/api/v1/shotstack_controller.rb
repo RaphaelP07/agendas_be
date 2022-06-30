@@ -22,7 +22,7 @@ module Api
       end
       
       def render_meeting
-        render_meeting = Shotstack::Client.render_meeting(params[:body])
+        render_meeting = Shotstack::Client.render_meeting
         render json: render_meeting
       end
 

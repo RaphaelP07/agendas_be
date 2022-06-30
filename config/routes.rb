@@ -29,6 +29,8 @@ Rails.application.routes.draw do
         delete '/teams/:id/remove', to: 'teams#remove_member'
         resources :meetings do
           resources :videos
+          post '/videos/render', to: 'videos#render_meeting'
+          post '/videos/:id/status', to: 'videos#render_status'
         end
         post '/meetings/:id/invite', to: 'meetings#send_invite'
         get '/meetings/:id/participants', to: 'meetings#show_participants'
