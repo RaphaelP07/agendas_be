@@ -26,16 +26,46 @@ module Shotstack
           "length": asset[:duration]
         }
       }
-    
+
+      html_array = videos.map {
+        |asset|
+        {
+          "asset": {
+            "type": "html",
+            "html": "<h1>#{asset[:name]}</h1>",
+            "css": "h1 { font-size: 75px; color: white }",
+            "background": "#003972",
+            "height": 85,
+            "width": 800
+          },
+          "start": 0,
+          "length": asset[:duration],
+          "position": "bottom",
+          "fit": "none",
+          "offset": {
+            "y": 0.055
+          }
+
+        }
+      }
+      
       clips = clips_array.each { 
         |asset|
         clips_array.index(asset) == 0 ? asset[:start] = 0 : asset[:start] = clips_array[clips_array.index(asset) - 1][:start] + clips_array[clips_array.index(asset) - 1][:length]
+      }
+
+      html = html_array.each { 
+        |asset|
+        html_array.index(asset) == 0 ? asset[:start] = 0 : asset[:start] = html_array[html_array.index(asset) - 1][:start] + html_array[html_array.index(asset) - 1][:length]
       }
     
       body = {
         "timeline": {
           "background": "#000000",
           "tracks": [
+            {
+              "clips": html
+            },
             {
               "clips": clips
             }
