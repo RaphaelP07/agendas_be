@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       post '/create_template', to: 'shotstack#create_template'
       post '/render', to: 'shotstack#render_meeting'
       get '/render', to: 'shotstack#render_status'
+      post '/webhook', to: 'shotstack#webhook'
     end
   end
 

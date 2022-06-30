@@ -1,7 +1,6 @@
 module Api
   module V1
     class ShotstackController < ApplicationController
-      
       def templates
         templates = Shotstack::Client.templates
         render json: templates
@@ -17,15 +16,19 @@ module Api
         render json: template
       end
       
+      def render_status
+        render_status = Shotstack::Client.render_status(params[:render_id])
+        render json: render_status
+      end
+      
       def render_meeting
         render_meeting = Shotstack::Client.render_meeting(params[:body])
         render json: render_meeting
       end
 
-      def render_status
-        render_status = Shotstack::Client.render_status(params[:render_id])
-        render json: render_status
-      end
+      # def webhook
+      #   puts "#{params[:action]} #{params[:status]}"
+      # end
     end
   end
 end
