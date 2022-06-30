@@ -1,44 +1,23 @@
 module Shotstack
   class Client
-    # def self.templates
-    #   response = Request.get_delete('get', "/templates")
-    # end
+    def self.templates
+      response = Request.get_delete('get', "/templates")
+    end
 
-    def self.render_meeting
-      body = {
-        "timeline": {
-          "background": "#000000",
-          "tracks": [
-            {
-              "clips": [
-                {
-                  "asset": {
-                    "type": "video",
-                    "src": "https://cdn.api.video/vod/vi1b8xUmCalRTkX9UJd4YqCY/mp4/source.mp4?dl=1"
-                  },
-                  "start": 0,
-                  "opacity": 1,
-                  "fit": "contain",
-                  "length": 4
-                },
-                {
-                    "asset": {
-                      "type": "video",
-                      "src": "https://cdn.api.video/vod/vi4rEJ498qSBX44Z2NFd4FlP/mp4/source.mp4?dl=1"
-                    },
-                    "length": 4,
-                    "start": 4
-                }
-              ]
-            }
-          ]
-        },
-        "output": {
-          "format": "mp4",
-          "resolution": "sd"
-        }
-      }
-      response = Request.render_meeting('get', "/render", body)
+    def self.template(id)
+      response = Request.get_id('get', "/templates/#{id}")
+    end
+
+    def self.create_template(body)
+      response = Request.post('post', "/templates", body)
+    end
+
+    def self.render_meeting(body)
+      response = Request.post('post', "/render", body)
+    end
+
+    def self.render_status(id)
+      response = Request.get_id('get', "/render/#{id}")
     end
   end
 end

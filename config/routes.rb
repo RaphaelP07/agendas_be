@@ -41,7 +41,10 @@ Rails.application.routes.draw do
       post '/upload', to: 'api_video#upload'
       delete '/delete', to: 'api_video#delete'
       get '/templates', to: 'shotstack#templates'
+      get '/template', to: 'shotstack#template'
+      post '/create_template', to: 'shotstack#create_template'
       post '/render', to: 'shotstack#render_meeting'
+      get '/render', to: 'shotstack#render_status'
     end
   end
 
