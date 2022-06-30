@@ -33,19 +33,19 @@ Rails.application.routes.draw do
       end
 
       # Third-party APIs
-      get '/rooms', to: 'daily_co#rooms'
-      get '/room/:name', to: 'daily_co#room'
-      get '/videos', to: 'api_video#videos'
-      get '/video', to: 'api_video#video'
-      get '/video/status', to: 'api_video#status'
-      post '/upload', to: 'api_video#upload'
-      delete '/delete', to: 'api_video#delete'
-      get '/templates', to: 'shotstack#templates'
-      get '/template', to: 'shotstack#template'
-      post '/create_template', to: 'shotstack#create_template'
-      post '/render', to: 'shotstack#render_meeting'
-      get '/render', to: 'shotstack#render_status'
-      post '/webhook', to: 'shotstack#webhook'
+      get '/daily_co/rooms', to: 'daily_co#rooms'
+      get '/daily_co/room/:name', to: 'daily_co#room'
+      get '/api_video/videos', to: 'api_video#videos'
+      get '/api_video/video', to: 'api_video#video'
+      get '/api_video/video/status', to: 'api_video#status'
+      post '/api_video/upload', to: 'api_video#upload'
+      delete '/api_video/delete', to: 'api_video#delete'
+      get '/shotstack/templates', to: 'shotstack#templates'
+      get '/shotstack/template', to: 'shotstack#template'
+      post '/shotstack/create_template', to: 'shotstack#create_template'
+      post '/shotstack/render', to: 'shotstack#render_meeting'
+      get '/shotstack/render', to: 'shotstack#render_status'
+      post '/shotstack/webhook', to: 'shotstack#webhook'
     end
   end
 
