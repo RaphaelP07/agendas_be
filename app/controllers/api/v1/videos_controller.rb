@@ -66,14 +66,15 @@ module Api
       def destroy
         @video.destroy
         auth = ApiVideo::Client.auth
-        delete = ApiVideo::Client.delete(auth[:data]['access_token'], params[:videoId])
+        delete = ApiVideo::Client.delete(auth[:data]['access_token'], @video['api_video_id'])
       
         render json: {
-          message: "Successfully deleted meeting."
+          message: "Successfully deleted video."
         }, status: :ok
       end
 
       def render_meeting
+
       end
 
       private
