@@ -12,4 +12,5 @@ class User < ApplicationRecord
   has_and_belongs_to_many :meetings
   has_many :messages, foreign_key: 'sender_id'
   has_many :organisations, foreign_key: 'admin_id'
+  has_may :videos
 end
