@@ -12,8 +12,8 @@ module Api
         status: {code: 200, message: 'Logged in sucessfully.'},
         data: {
           user: UserSerializer.new(resource).serializable_hash[:data][:attributes],
-          orgs: Organisation.all.select {
-            |org| org.users.find(resource['id'])
+          is_in_org: Organisation.all.one?{
+            |org| org.users.one? {|user| user['id'] == resource['id']}
           }
         }
       }, status: :ok
