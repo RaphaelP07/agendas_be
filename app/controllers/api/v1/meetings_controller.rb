@@ -81,6 +81,7 @@ module Api
 
       def send_invite
         InviteMailer.with(user: member, meeting: @meeting).send_invite.deliver_later
+        @meeting.users << member
         render json: {
           recipient: member['email'],
           meeting: @meeting
@@ -100,7 +101,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def meeting_params
-        params.require(:meeting).permit(:name, :notes, :synchronicity, :schedule)
+        params.require(:meeting).permit(:name, :notes, :synchronicity, :schedule, :url)
       end
     end
   end
