@@ -9,7 +9,7 @@ module Api
       # GET /organisations
       def index
         @organisations = Organisation.all.select {
-                          |org| org.users.find(@user['id'])
+                          |org| org.users.find_by(id: @user['id'])
                         }
         render json: @organisations
       end
