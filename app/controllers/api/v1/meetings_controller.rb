@@ -33,7 +33,7 @@ module Api
 
         meeting_is_sync = @meeting['synchronicity'] == "sync"
         response = DailyCo::Client::create_room(meeting_params) if meeting_is_sync
-        room_creation_failed = response[:code] != 200
+        room_creation_failed = response[:code] != 200 if meeting_is_sync
 
         if room_creation_failed
           render json: {
@@ -43,7 +43,11 @@ module Api
         end
 
         if @meeting.save
-          @meeting.update(url: response[:data]['url']) if meeting_is_sync
+          if meeting_is_sync
+            @meeting.update(url: response[:data]['url'])
+          else
+            @meeting.update(url: "http://localhost:3001/agendas/meetings/#{@meeting['id']}")
+          end
           @meeting.users << @user
           render json: {
             data: @meeting
